@@ -1,5 +1,13 @@
 package models
 
 class Player {
-    var points = 1L
+    private var points = 0L
+
+    fun getPoints(): Long {
+        return points
+    }
+
+    fun updatePointsBy(points: Long){
+        this.points += points
+    }
 }

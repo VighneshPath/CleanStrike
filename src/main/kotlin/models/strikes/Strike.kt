@@ -1,5 +1,8 @@
 package models.strikes
 
+import models.Coins
+
 interface Strike {
-    fun run(): Long
+    fun getPoints(): Long
+    fun executeStrike(coins: Coins): Coins
 }

@@ -1,14 +1,19 @@
 package models
 
+import exceptions.NoMoreCoinsLeftException
 import models.strikes.Strike
 
-class Board(player1: Player, player2: Player) {
-    private var blackCoins = 9L
-    private var redCoins = 1L
-    fun executeStrike(strike: Strike, player: Player){
-        val updateCoins = strike.run()
-        player.points+=updateCoins
-        blackCoins-=updateCoins
-        return
+class Board(private var coins: Coins) {
+    fun playTurn(player: Player, strike: Strike): Player {
+        if(!hasCoins()) throw NoMoreCoinsLeftException()
+        val updatedPlayer = Player()
+        coins = strike.executeStrike(coins)
+        updatedPlayer.updatePointsBy(player.getPoints() + strike.getPoints())
+        return updatedPlayer
     }
+
+    fun hasCoins(): Boolean {
+        return coins.blackCoins > 0 || coins.redCoins > 0
+    }
+
 }
