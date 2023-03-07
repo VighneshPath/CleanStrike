@@ -7,7 +7,8 @@ class Board(private var coins: Coins) {
     fun playTurn(player: Player, strike: Strike): Player {
         if(!hasCoins()) throw NoMoreCoinsLeftException()
         val updatedPlayer = Player()
-        coins = strike.executeStrike(coins)
+        coins = strike.getCoinUpdateForPlayer()
+
         updatedPlayer.updatePointsBy(player.getPoints() + strike.getPoints())
         return updatedPlayer
     }
