@@ -15,7 +15,7 @@ class BoardTest{
 
         val board = Board(coins)
 
-        assertEquals(expectedCoinsStatus, board.hasCoins())
+        assertEquals(expectedCoinsStatus, !board.doesNotHaveCoins())
     }
 
 
