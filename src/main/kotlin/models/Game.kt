@@ -15,12 +15,12 @@ class Game(private val board: Board, private val playersList: List<Player>) {
     fun playTurn(option: String): GameStatus {
         if (gameIsAlreadyOver()) return gameStatus
 
+        updateCurrentPlayerIndex()
+
         if (option == PASS_TURN.option) {
             penalizePlayerForNotPocketingCoins()
             return gameStatus
         }
-
-        updateCurrentPlayerIndex()
 
         val strike = StrikeFactory.createStrike(option)
 
