@@ -3,6 +3,7 @@ package models
 import constants.MAX_POSSIBLE_FOULS
 import constants.MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY
 import models.GameStatus.*
+import models.StrikeTypes.PASS_TURN
 import models.strikes.Strike
 import models.strikes.StrikeFactory
 
@@ -12,16 +13,14 @@ class Game(private val board: Board, private val playersList: List<Player>) {
     private var gameStatus = ACTIVE
 
     fun playTurn(option: String): GameStatus {
-        updateCurrentPlayerIndex()
-        if(gameStatus == COMPLETE) return gameStatus
-        if(board.doesNotHaveCoins()){
-            if(gameStatus != DRAW) gameStatus = DRAW
-            return gameStatus
-        }
-        if(option == "6"){
+        if(gameIsAlreadyOver()) return gameStatus
+
+        if(option == PASS_TURN.option){
             penalizePlayerForNotPocketingCoins()
             return gameStatus
         }
+
+        updateCurrentPlayerIndex()
 
         val strike = StrikeFactory.createStrike(option)
 
@@ -32,6 +31,22 @@ class Game(private val board: Board, private val playersList: List<Player>) {
 
         return gameStatus
     }
+
+    private fun gameIsAlreadyOver(): Boolean {
+        if (gameStatus == COMPLETE) return true
+
+        if (board.doesNotHaveCoins()) {
+            setGameStatusToDrawIfNotAlready()
+            return true
+        }
+
+        return false
+    }
+
+    private fun setGameStatusToDrawIfNotAlready() {
+        if (gameStatus != DRAW) gameStatus = DRAW
+    }
+
     private fun updateCurrentPlayerIndex(){
         currentPlayerIndex = (currentPlayerIndex+1)%playersList.size
     }
