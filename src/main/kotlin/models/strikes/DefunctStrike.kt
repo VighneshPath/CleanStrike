@@ -14,4 +14,8 @@ class DefunctStrike: Strike {
     override fun getCoinUpdateForBoard(): Coins{
         return Coins(-1, 0)
     }
+
+    override fun isFoul(): Boolean {
+        return true
+    }
 }

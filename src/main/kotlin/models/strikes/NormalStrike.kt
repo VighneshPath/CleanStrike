@@ -16,4 +16,8 @@ class NormalStrike: Strike {
         return Coins(-1, 0)
     }
 
+    override fun isFoul(): Boolean {
+        return false
+    }
+
 }

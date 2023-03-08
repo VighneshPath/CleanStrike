@@ -15,4 +15,8 @@ class MultiStrike: Strike {
         return Coins(-2, 0)
     }
 
+    override fun isFoul(): Boolean {
+        return false
+    }
+
 }

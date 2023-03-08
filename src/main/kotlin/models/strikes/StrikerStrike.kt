@@ -14,4 +14,8 @@ class StrikerStrike: Strike{
     override fun getCoinUpdateForBoard(): Coins {
         return Coins(0, 0)
     }
+
+    override fun isFoul(): Boolean {
+        return true
+    }
 }

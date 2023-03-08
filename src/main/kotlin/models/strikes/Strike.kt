@@ -6,4 +6,5 @@ interface Strike {
     fun getPoints(): Long
     fun getCoinUpdateForPlayer(): Coins
     fun getCoinUpdateForBoard(): Coins
+    fun isFoul(): Boolean
 }

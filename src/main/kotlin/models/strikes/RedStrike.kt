@@ -14,4 +14,8 @@ class RedStrike: Strike {
     override fun getCoinUpdateForBoard(): Coins {
         return Coins(0, -1)
     }
+
+    override fun isFoul(): Boolean {
+        return false
+    }
 }

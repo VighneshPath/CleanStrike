@@ -1,13 +1,14 @@
 package models
 
 import constants.MAX_POSSIBLE_FOULS
+import constants.MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY
 import exceptions.NoMoreCoinsLeftException
 import models.GameStatus.*
 import models.strikes.Strike
 import models.strikes.StrikeFactory
 
 class Game(private val board: Board, private val playersList: List<Player>) {
-    private var currentPlayer = 0
+    private var currentPlayer = -1
     private var winningPlayer: Player? = null
     private var gameStatus = ACTIVE
 
@@ -36,24 +37,26 @@ class Game(private val board: Board, private val playersList: List<Player>) {
     }
 
     fun playTurn(option: String): GameStatus {
+        updateCurrentPlayer()
         if(gameStatus == COMPLETE) return gameStatus
         if(!board.hasCoins()){
             if(gameStatus != DRAW) gameStatus = DRAW
             return gameStatus
         }
         if(option == "6"){
-            penalizePlayer()
-            updateCurrentPlayer()
+            penalizePlayerForNotPocketingCoins()
             return gameStatus
         }
 
         val strike = StrikeFactory.createStrike(option)
 
         updatedBoard(strike)
-
         updatePlayer(strike)
 
-        updateCurrentPlayer()
+        if(strike.isFoul()){
+            penalizePlayerForFoul()
+            penalizePlayerForNotPocketingCoins()
+        }
 
         if(checkIfAnyPlayerWon()){
             gameStatus = COMPLETE
@@ -65,13 +68,21 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         return gameStatus
     }
 
-    private fun penalizePlayer() {
+    private fun penalizePlayerForFoul() {
         val currentPlayer = getCurrentPlayer()
+        currentPlayer.addAPenalty()
         if (currentPlayer.getPlayerPenaltyPoints() >= MAX_POSSIBLE_FOULS) {
             currentPlayer.updatePointsBy(-1)
             currentPlayer.resetPenalty()
-        } else {
-            currentPlayer.addAPenalty()
+        }
+    }
+
+    private fun penalizePlayerForNotPocketingCoins(){
+        val currentPlayer = getCurrentPlayer()
+        currentPlayer.addToConsecutiveNotPocketedCoins()
+        if (currentPlayer.getPlayerConsecutiveNotPocketedCoins() >= MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY) {
+            currentPlayer.updatePointsBy(-1)
+            currentPlayer.resetConsecutiveNotPocketedCoins()
         }
     }
 

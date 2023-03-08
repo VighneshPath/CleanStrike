@@ -1,9 +1,11 @@
 package models
 
+import exceptions.InvalidOptionTypeException
 import models.GameStatus.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class GameTest{
     private var player1 = Player()
@@ -88,7 +90,6 @@ class GameTest{
         board = Board(Coins(3, 0))
         game = Game(board, listOf(player1, player2))
         val expectedGameStatus = DRAW
-
         val normalStrike = "1"
 
         for(turn in 0 until 5){
@@ -99,5 +100,66 @@ class GameTest{
 
         assertEquals(expectedGameStatus, actualGameStatus)
         assertNull(game.getWinner())
+    }
+
+    @Test
+    fun `should decrease the points of a player by 1 if they do not get a point for three consecutive turns`(){
+        val skipTurn = "6"
+        val expectedPlayerPoints = -1L
+
+        for(turn in 0 until 3){
+            game.playTurn(skipTurn)
+            game.playTurn(skipTurn)
+        }
+
+        assertEquals(expectedPlayerPoints, player1.getPlayerPoints())
+    }
+
+    @Test
+    fun `should foul 3 times by striker strike to get a 2 additional point loss`(){
+        val strikerStrike = "4"
+        val normalStrike = "1"
+        val expectedPlayer2Points = -5L
+
+        for(turn in 0 until 3){
+            game.playTurn(normalStrike)
+            game.playTurn(strikerStrike)
+        }
+
+        assertEquals(expectedPlayer2Points, player2.getPlayerPoints())
+    }
+
+    @Test
+    fun `should foul 3 times by defunct coin to get a 2 additional point loss`(){
+        val defunctStrike = "5"
+        val normalStrike = "1"
+        val expectedPlayer2Points = -8L
+
+        for(turn in 0 until 3){
+            game.playTurn(normalStrike)
+            game.playTurn(defunctStrike)
+        }
+
+        assertEquals(expectedPlayer2Points, player2.getPlayerPoints())
+    }
+
+    @Test
+    fun `should throw an error if there are more than one red strikes`(){
+        val redStrike = "3"
+
+        game.playTurn(redStrike)
+
+        assertThrows<InvalidOptionTypeException>{game.playTurn(redStrike)}
+    }
+
+    @Test
+    fun `should throw an error if there are more than 4 multi strikes`(){
+        val multiStrike = "2"
+
+        for(turn in 0 until 4){
+            game.playTurn(multiStrike)
+        }
+
+        assertThrows<InvalidOptionTypeException>{game.playTurn(multiStrike)}
     }
 }
