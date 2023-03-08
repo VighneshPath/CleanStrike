@@ -2,7 +2,7 @@ package models.strikes
 
 import models.Coins
 
-class DefunctStrike: Strike {
+class DefunctStrike : Strike {
     override fun getPoints(): Long {
         return -2L
     }
@@ -11,7 +11,7 @@ class DefunctStrike: Strike {
         return Coins(0, 0)
     }
 
-    override fun getCoinUpdateForBoard(): Coins{
+    override fun getCoinUpdateForBoard(): Coins {
         return Coins(-1, 0)
     }
 

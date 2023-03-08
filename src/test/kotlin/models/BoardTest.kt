@@ -1,12 +1,12 @@
 package models
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class BoardTest{
+class BoardTest {
 
     @Test
-    fun `should create a board with some coins`(){
+    fun `should create a board with some coins`() {
         val coins = Coins(9, 1)
         val expectedCoinsStatus = true
 
@@ -17,7 +17,7 @@ class BoardTest{
 
 
     @Test
-    fun `should create a board with exact coins`(){
+    fun `should create a board with exact coins`() {
         val coins = Coins(9, 1)
 
         val board = Board(coins)
@@ -26,7 +26,7 @@ class BoardTest{
     }
 
     @Test
-    fun `should create a board and remove a black coin`(){
+    fun `should create a board and remove a black coin`() {
         val coins = Coins(1, 0)
         val board = Board(coins)
         val coinsUpdates = Coins(-1, 0)

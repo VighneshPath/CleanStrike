@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class GameTest{
+class GameTest {
     private var player1 = Player()
     private var player2 = Player()
     private var board = Board(Coins(0, 0))
@@ -22,7 +22,7 @@ class GameTest{
     }
 
     @Test
-    fun `should create a game with two players, and player1 plays a Normal Strike`(){
+    fun `should create a game with two players, and player1 plays a Normal Strike`() {
         val option = "1"
         val expectedBoardCoins = Coins(8, 1)
         val expectedPlayerCoins = Coins(1, 0)
@@ -38,7 +38,7 @@ class GameTest{
     }
 
     @Test
-    fun `should create a game with two players, and both players should play a Normal Strike`(){
+    fun `should create a game with two players, and both players should play a Normal Strike`() {
         val option = "1"
         val expectedBoardCoins = Coins(7, 1)
         val expectedPlayerCoins = Coins(1, 0)
@@ -53,7 +53,7 @@ class GameTest{
     }
 
     @Test
-    fun `should declare the game as a DRAW if there are no more coins on the board`(){
+    fun `should declare the game as a DRAW if there are no more coins on the board`() {
         board = Board(Coins(0, 0))
         game = Game(board, listOf(player1, player2))
         val expectedGameStatus = DRAW
@@ -64,7 +64,7 @@ class GameTest{
     }
 
     @Test
-    fun `should complete the game if one player wins`(){
+    fun `should complete the game if one player wins`() {
         board = Board(Coins(5, 0))
         game = Game(board, listOf(player1, player2))
         val expectedGameStatus = COMPLETE
@@ -72,7 +72,7 @@ class GameTest{
         val normalStrike = "1"
         val skipTurn = "6"
 
-        for(turn in 0 until 5){
+        for (turn in 0 until 5) {
             game.playTurn(normalStrike)
             game.playTurn(skipTurn)
         }
@@ -86,13 +86,13 @@ class GameTest{
 
 
     @Test
-    fun `should result in a draw`(){
+    fun `should result in a draw`() {
         board = Board(Coins(3, 0))
         game = Game(board, listOf(player1, player2))
         val expectedGameStatus = DRAW
         val normalStrike = "1"
 
-        for(turn in 0 until 5){
+        for (turn in 0 until 5) {
             game.playTurn(normalStrike)
             game.playTurn(normalStrike)
         }
@@ -103,11 +103,11 @@ class GameTest{
     }
 
     @Test
-    fun `should decrease the points of a player by 1 if they do not get a point for three consecutive turns`(){
+    fun `should decrease the points of a player by 1 if they do not get a point for three consecutive turns`() {
         val skipTurn = "6"
         val expectedPlayerPoints = -1L
 
-        for(turn in 0 until 3){
+        for (turn in 0 until 3) {
             game.playTurn(skipTurn)
             game.playTurn(skipTurn)
         }
@@ -116,12 +116,12 @@ class GameTest{
     }
 
     @Test
-    fun `should foul 3 times by striker strike to get a 2 additional point loss`(){
+    fun `should foul 3 times by striker strike to get a 2 additional point loss`() {
         val strikerStrike = "4"
         val normalStrike = "1"
         val expectedPlayer2Points = -5L
 
-        for(turn in 0 until 3){
+        for (turn in 0 until 3) {
             game.playTurn(normalStrike)
             game.playTurn(strikerStrike)
         }
@@ -130,12 +130,12 @@ class GameTest{
     }
 
     @Test
-    fun `should foul 3 times by defunct coin to get a 2 additional point loss`(){
+    fun `should foul 3 times by defunct coin to get a 2 additional point loss`() {
         val defunctStrike = "5"
         val normalStrike = "1"
         val expectedPlayer2Points = -8L
 
-        for(turn in 0 until 3){
+        for (turn in 0 until 3) {
             game.playTurn(normalStrike)
             game.playTurn(defunctStrike)
         }
@@ -144,22 +144,22 @@ class GameTest{
     }
 
     @Test
-    fun `should throw an error if there are more than one red strikes`(){
+    fun `should throw an error if there are more than one red strikes`() {
         val redStrike = "3"
 
         game.playTurn(redStrike)
 
-        assertThrows<InvalidOptionTypeException>{game.playTurn(redStrike)}
+        assertThrows<InvalidOptionTypeException> { game.playTurn(redStrike) }
     }
 
     @Test
-    fun `should throw an error if there are more than 4 multi strikes`(){
+    fun `should throw an error if there are more than 4 multi strikes`() {
         val multiStrike = "2"
 
-        for(turn in 0 until 4){
+        for (turn in 0 until 4) {
             game.playTurn(multiStrike)
         }
 
-        assertThrows<InvalidOptionTypeException>{game.playTurn(multiStrike)}
+        assertThrows<InvalidOptionTypeException> { game.playTurn(multiStrike) }
     }
 }
