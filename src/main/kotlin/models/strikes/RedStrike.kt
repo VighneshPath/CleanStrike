@@ -2,22 +2,20 @@ package models.strikes
 
 import models.Coins
 
-class NormalStrike: Strike {
-
+class RedStrike: Strike {
     override fun getPoints(): Long {
-        return 1L
+        return 3L
     }
 
     override fun getCoinUpdateForPlayer(): Coins {
-        return Coins(1, 0)
+        return Coins(0, 1)
     }
 
     override fun getCoinUpdateForBoard(): Coins {
-        return Coins(-1, 0)
+        return Coins(0, -1)
     }
 
     override fun isFoul(): Boolean {
         return false
     }
-
 }

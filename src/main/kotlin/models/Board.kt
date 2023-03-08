@@ -1,14 +1,24 @@
 package models
 
-import models.strikes.Strike
+import exceptions.InvalidOptionTypeException
 
-class Board(player1: Player, player2: Player) {
-    private var blackCoins = 9L
-    private var redCoins = 1L
-    fun executeStrike(strike: Strike, player: Player){
-        val updateCoins = strike.run()
-        player.points+=updateCoins
-        blackCoins-=updateCoins
-        return
+class Board(private var coins: Coins) {
+    fun hasCoins(): Boolean {
+        return coins.blackCoins > 0 || coins.redCoins > 0
     }
+
+    fun updateCoinsBy(coins: Coins){
+        checkCoinUpdate(coins)
+        this.coins.blackCoins += coins.blackCoins
+        this.coins.redCoins += coins.redCoins
+    }
+
+    private fun checkCoinUpdate(coins: Coins) {
+        if(this.coins.blackCoins + coins.blackCoins < 0 ||
+            this.coins.redCoins + coins.redCoins < 0){
+            throw InvalidOptionTypeException()
+        }
+    }
+
+    fun getCoins() = coins
 }

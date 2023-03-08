@@ -5,15 +5,15 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class NormalStrikeTest{
-    private var strike = NormalStrike()
+class MultiStrikeTest{
+    private var strike = MultiStrike()
     @BeforeEach
     fun setUp(){
-        strike = NormalStrike()
+        strike = MultiStrike()
     }
     @Test
-    fun `should strike and give coin updates for the player`(){
-        val expectedCoins = Coins(1, 0)
+    fun `should strike and give coins which is added to players coins`(){
+        val expectedCoins = Coins(2, 0)
 
         val givenCoins = strike.getCoinUpdateForPlayer()
 
@@ -22,7 +22,7 @@ class NormalStrikeTest{
 
     @Test
     fun `should return the number of points that should be updated for a player after the strike`(){
-        val expectedPoints = 1L
+        val expectedPoints = 2L
 
         assertEquals(expectedPoints, strike.getPoints())
     }

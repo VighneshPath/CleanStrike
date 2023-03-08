@@ -1,5 +1,10 @@
 package models.strikes
 
+import models.Coins
+
 interface Strike {
-    fun run(): Long
+    fun getPoints(): Long
+    fun getCoinUpdateForPlayer(): Coins
+    fun getCoinUpdateForBoard(): Coins
+    fun isFoul(): Boolean
 }

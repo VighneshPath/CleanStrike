@@ -1,5 +1,48 @@
 package models
 
-class Player {
-    var points = 1L
+data class Player(private var coins: Coins = Coins(0, 0)){
+    private var points = 0L
+    private var penaltyPoints = 0L
+    private var consecutiveNotPocketedCoins = 0L
+
+    fun getPlayerPenaltyPoints(): Long {
+        return penaltyPoints
+    }
+
+    fun getPlayerPoints(): Long {
+        return points
+    }
+
+    fun getPlayerCoins(): Coins{
+        return coins
+    }
+
+    fun getPlayerConsecutiveNotPocketedCoins(): Long {
+        return consecutiveNotPocketedCoins
+    }
+
+    fun updatePointsBy(points: Long){
+        this.points += points
+    }
+
+    fun addAPenalty(){
+        penaltyPoints += 1L
+    }
+
+    fun resetPenalty(){
+        penaltyPoints = 0L
+    }
+
+    fun addToConsecutiveNotPocketedCoins(){
+        consecutiveNotPocketedCoins+=1L
+    }
+
+    fun resetConsecutiveNotPocketedCoins(){
+        consecutiveNotPocketedCoins = 0L
+    }
+
+    fun updateCoinsBy(coins: Coins){
+        this.coins.blackCoins += coins.blackCoins
+        this.coins.redCoins += coins.redCoins
+    }
 }

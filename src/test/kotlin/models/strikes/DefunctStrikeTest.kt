@@ -5,15 +5,16 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class NormalStrikeTest{
-    private var strike = NormalStrike()
+class DefunctStrikeTest{
+    private var strike = DefunctStrike()
     @BeforeEach
     fun setUp(){
-        strike = NormalStrike()
+        strike = DefunctStrike()
     }
+
     @Test
     fun `should strike and give coin updates for the player`(){
-        val expectedCoins = Coins(1, 0)
+        val expectedCoins = Coins(0, 0)
 
         val givenCoins = strike.getCoinUpdateForPlayer()
 
@@ -22,15 +23,16 @@ class NormalStrikeTest{
 
     @Test
     fun `should return the number of points that should be updated for a player after the strike`(){
-        val expectedPoints = 1L
+        val expectedPoints = -2L
 
         assertEquals(expectedPoints, strike.getPoints())
     }
 
     @Test
     fun `should not be a foul`(){
-        val expectedStatus = false
+        val expectedStatus = true
 
         assertEquals(expectedStatus, strike.isFoul())
     }
+
 }

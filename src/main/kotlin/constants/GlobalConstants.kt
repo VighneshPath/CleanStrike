@@ -1,0 +1,5 @@
+package constants
+
+const val MAX_POSSIBLE_FOULS = 3L
+
+const val MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY = 3L
