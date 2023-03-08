@@ -10,10 +10,5 @@ class Board(private var coins: Coins) {
         this.coins.redCoins += coins.redCoins
     }
 
-    private fun removeFromCoins(coins: Coins){
-        this.coins.blackCoins -= coins.blackCoins
-        this.coins.redCoins -= coins.redCoins
-    }
-
     fun getCoins() = coins
 }
