@@ -12,4 +12,8 @@ class NormalStrike: Strike {
         return Coins(1, 0)
     }
 
+    override fun getCoinUpdateForBoard(): Coins {
+        return Coins(-1, 0)
+    }
+
 }

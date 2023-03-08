@@ -9,29 +9,34 @@ import org.junit.jupiter.api.assertThrows
 class BoardTest{
 
     @Test
-    fun `should create a board with two players and play a turn for player 1`(){
+    fun `should create a board with some coins`(){
         val coins = Coins(9, 1)
+        val expectedCoinsStatus = true
+
         val board = Board(coins)
-        val player1 = Player()
-        val expectedPlayer1Points = player1.getPoints() + 1
-        val strike = NormalStrike()
 
-        val updatedPlayer1 = board.playTurn(player1, strike)
+        assertEquals(expectedCoinsStatus, board.hasCoins())
+    }
 
-        assertEquals(expectedPlayer1Points, updatedPlayer1.getPoints())
+
+    @Test
+    fun `should create a board with exact coins`(){
+        val coins = Coins(9, 1)
+
+        val board = Board(coins)
+
+        assertEquals(coins, board.getCoins())
     }
 
     @Test
-    fun `should create a board with two players and the game should finish once there are 0 coins on the board`(){
+    fun `should create a board and remove a black coin`(){
         val coins = Coins(1, 0)
         val board = Board(coins)
-        val player1 = Player()
-        val strike = NormalStrike()
-        val expectedBoardStatus = false
+        val coinsUpdates = Coins(-1, 0)
+        val expectedCoins = Coins(0, 0)
 
-        board.playTurn(player1, strike)
+        board.updateCoinsBy(coinsUpdates)
 
-        assertEquals(expectedBoardStatus, board.hasCoins())
-        assertThrows<NoMoreCoinsLeftException>{board.playTurn(player1, strike)}
+        assertEquals(expectedCoins, board.getCoins())
     }
 }

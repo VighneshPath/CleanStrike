@@ -7,7 +7,16 @@ class Player(private var coins: Coins = Coins(0, 0)){
         return points
     }
 
+    fun getCoins(): Coins{
+        return coins
+    }
+
     fun updatePointsBy(points: Long){
         this.points += points
+    }
+
+    fun updateCoinsBy(coins: Coins){
+        this.coins.blackCoins += coins.blackCoins
+        this.coins.redCoins += coins.redCoins
     }
 }

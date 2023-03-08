@@ -1,17 +1,27 @@
 package models
 
-import java.io.ByteArrayInputStream
-import java.io.DataInputStream
-import java.io.InputStream
-import java.io.PrintWriter
+import exceptions.NoMoreCoinsLeftException
+import models.strikes.StrikeFactory
 
-class Game(val board: Board, private val player1: Player, private val player2: Player) {
-    fun startGame(inputStream: DataInputStream, outputStream: PrintWriter){
-        var isPlayer1Turn = true
-        while(true){
-            val player = if(isPlayer1Turn) player1 else player2
-            isPlayer1Turn = !isPlayer1Turn
-            inputStream.readInt()
-        }
+class Game(private val board: Board, private val playersList: List<Player>) {
+    private var currentPlayer = 0
+
+    private fun getCurrentPlayer(): Player{
+        return playersList[currentPlayer]
+    }
+
+    fun playTurn(option: String) {
+        if(!board.hasCoins()) throw NoMoreCoinsLeftException()
+        if(option == "6") return
+
+        val strike = StrikeFactory.createStrike(option)
+
+        val boardUpdates = strike.getCoinUpdateForBoard()
+        board.updateCoinsBy(boardUpdates)
+
+        val player = getCurrentPlayer()
+        val playerCoinsUpdates = strike.getCoinUpdateForPlayer()
+        player.updateCoinsBy(playerCoinsUpdates)
+        player.updatePointsBy(strike.getPoints())
     }
 }

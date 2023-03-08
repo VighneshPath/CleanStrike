@@ -11,4 +11,8 @@ class MultiStrike: Strike {
         return Coins(2, 0)
     }
 
+    override fun getCoinUpdateForBoard(): Coins {
+        return Coins(-2, 0)
+    }
+
 }

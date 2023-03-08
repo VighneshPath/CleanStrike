@@ -2,16 +2,16 @@ package models.strikes
 
 import models.Coins
 
-class StrikerStrike: Strike{
+class DefunctStrike: Strike {
     override fun getPoints(): Long {
-        return -1L
+        return -2L
     }
 
     override fun getCoinUpdateForPlayer(): Coins {
         return Coins(0, 0)
     }
 
-    override fun getCoinUpdateForBoard(): Coins {
-        return Coins(0, 0)
+    override fun getCoinUpdateForBoard(): Coins{
+        return Coins(-1, 0)
     }
 }

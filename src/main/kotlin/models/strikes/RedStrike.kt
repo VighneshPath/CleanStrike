@@ -10,4 +10,8 @@ class RedStrike: Strike {
     override fun getCoinUpdateForPlayer(): Coins {
         return Coins(0, 1)
     }
+
+    override fun getCoinUpdateForBoard(): Coins {
+        return Coins(0, -1)
+    }
 }
