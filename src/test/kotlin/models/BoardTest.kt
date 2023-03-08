@@ -1,10 +1,7 @@
 package models
 
-import exceptions.NoMoreCoinsLeftException
-import models.strikes.NormalStrike
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 class BoardTest{
 
@@ -15,7 +12,7 @@ class BoardTest{
 
         val board = Board(coins)
 
-        assertEquals(expectedCoinsStatus, board.hasCoins())
+        assertEquals(expectedCoinsStatus, !board.doesNotHaveCoins())
     }
 
 

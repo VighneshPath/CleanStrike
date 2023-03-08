@@ -2,23 +2,59 @@ package models
 
 import constants.MAX_POSSIBLE_FOULS
 import constants.MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY
-import exceptions.NoMoreCoinsLeftException
 import models.GameStatus.*
+import models.StrikeTypes.PASS_TURN
 import models.strikes.Strike
 import models.strikes.StrikeFactory
 
 class Game(private val board: Board, private val playersList: List<Player>) {
-    private var currentPlayer = -1
+    private var currentPlayerIndex = -1
     private var winningPlayer: Player? = null
     private var gameStatus = ACTIVE
 
-    private fun getCurrentPlayer(): Player{
-        return playersList[currentPlayer]
+    fun playTurn(option: String): GameStatus {
+        if(gameIsAlreadyOver()) return gameStatus
+
+        if(option == PASS_TURN.option){
+            penalizePlayerForNotPocketingCoins()
+            return gameStatus
+        }
+
+        updateCurrentPlayerIndex()
+
+        val strike = StrikeFactory.createStrike(option)
+
+        updatedBoardBasedOn(strike)
+        updatePlayerBasedOn(strike)
+
+        updateGameStatus()
+
+        return gameStatus
     }
 
-    private fun updateCurrentPlayer(){
-        currentPlayer = (currentPlayer+1)%playersList.size
+    private fun gameIsAlreadyOver(): Boolean {
+        if (gameStatus == COMPLETE) return true
+
+        if (board.doesNotHaveCoins()) {
+            setGameStatusToDrawIfNotAlready()
+            return true
+        }
+
+        return false
     }
+
+    private fun setGameStatusToDrawIfNotAlready() {
+        if (gameStatus != DRAW) gameStatus = DRAW
+    }
+
+    private fun updateCurrentPlayerIndex(){
+        currentPlayerIndex = (currentPlayerIndex+1)%playersList.size
+    }
+
+    private fun getCurrentPlayer(): Player{
+        return playersList[currentPlayerIndex]
+    }
+
 
     private fun checkIfAnyPlayerWon(): Boolean{
         val potentialWinningPlayers = playersList.filter{it.getPlayerPoints() >= 5}
@@ -36,44 +72,12 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         return false
     }
 
-    fun playTurn(option: String): GameStatus {
-        updateCurrentPlayer()
-        if(gameStatus == COMPLETE) return gameStatus
-        if(!board.hasCoins()){
-            if(gameStatus != DRAW) gameStatus = DRAW
-            return gameStatus
-        }
-        if(option == "6"){
-            penalizePlayerForNotPocketingCoins()
-            return gameStatus
-        }
 
-        val strike = StrikeFactory.createStrike(option)
-
-        updatedBoard(strike)
-        updatePlayer(strike)
-
-        if(strike.isFoul()){
-            penalizePlayerForFoul()
-            penalizePlayerForNotPocketingCoins()
-        }
-
-        if(checkIfAnyPlayerWon()){
+    private fun updateGameStatus() {
+        if (checkIfAnyPlayerWon()) {
             gameStatus = COMPLETE
-        }
-        else if(!board.hasCoins()){
+        } else if (board.doesNotHaveCoins()) {
             gameStatus = DRAW
-        }
-
-        return gameStatus
-    }
-
-    private fun penalizePlayerForFoul() {
-        val currentPlayer = getCurrentPlayer()
-        currentPlayer.addAPenalty()
-        if (currentPlayer.getPlayerPenaltyPoints() >= MAX_POSSIBLE_FOULS) {
-            currentPlayer.updatePointsBy(-1)
-            currentPlayer.resetPenalty()
         }
     }
 
@@ -85,18 +89,29 @@ class Game(private val board: Board, private val playersList: List<Player>) {
             currentPlayer.resetConsecutiveNotPocketedCoins()
         }
     }
+    private fun penalizePlayerForFoul() {
+        val currentPlayer = getCurrentPlayer()
+        currentPlayer.addAPenalty()
+        if (currentPlayer.getPlayerPenaltyPoints() >= MAX_POSSIBLE_FOULS) {
+            currentPlayer.updatePointsBy(-1)
+            currentPlayer.resetPenalty()
+        }
+    }
 
-    private fun updatePlayer(strike: Strike) {
+
+    private fun updatePlayerBasedOn(strike: Strike) {
         val player = getCurrentPlayer()
-        val playerCoinsUpdates = strike.getCoinUpdateForPlayer()
-        player.updateCoinsBy(playerCoinsUpdates)
+
+        player.updateCoinsBy(strike.getCoinUpdateForPlayer())
         player.updatePointsBy(strike.getPoints())
+
+        if(strike.isFoul()){
+            penalizePlayerForNotPocketingCoins()
+            penalizePlayerForFoul()
+        }
     }
 
-    private fun updatedBoard(strike: Strike) {
-        val boardUpdates = strike.getCoinUpdateForBoard()
-        board.updateCoinsBy(boardUpdates)
-    }
+    private fun updatedBoardBasedOn(strike: Strike) = board.updateCoinsBy(strike.getCoinUpdateForBoard())
 
     fun getWinner(): Player?{
         return winningPlayer
