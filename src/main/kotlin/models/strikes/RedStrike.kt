@@ -2,7 +2,7 @@ package models.strikes
 
 import models.Coins
 
-class RedStrike: Strike {
+class RedStrike : Strike {
     override fun getPoints(): Long {
         return 3L
     }

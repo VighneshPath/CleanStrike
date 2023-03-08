@@ -2,7 +2,7 @@ package models.strikes
 
 import models.Coins
 
-class NormalStrike: Strike {
+class NormalStrike : Strike {
 
     override fun getPoints(): Long {
         return 1L
