@@ -13,6 +13,8 @@ class Board(private var coins: Coins) {
         this.coins.redCoins += coins.redCoins
     }
 
+    fun getCoins() = coins
+
     private fun checkCoinUpdate(coins: Coins) {
         if (this.coins.blackCoins + coins.blackCoins < 0 ||
             this.coins.redCoins + coins.redCoins < 0
@@ -20,6 +22,4 @@ class Board(private var coins: Coins) {
             throw InvalidOptionTypeException()
         }
     }
-
-    fun getCoins() = coins
 }

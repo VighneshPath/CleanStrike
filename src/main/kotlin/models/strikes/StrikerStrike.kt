@@ -3,19 +3,11 @@ package models.strikes
 import models.Coins
 
 class StrikerStrike : Strike {
-    override fun getPoints(): Long {
-        return -1L
-    }
+    override fun getPoints() = -1L
 
-    override fun getCoinUpdateForPlayer(): Coins {
-        return Coins(0, 0)
-    }
+    override fun getCoinUpdateForPlayer() = Coins(0, 0)
 
-    override fun getCoinUpdateForBoard(): Coins {
-        return Coins(0, 0)
-    }
+    override fun getCoinUpdateForBoard() = Coins(0, 0)
 
-    override fun isFoul(): Boolean {
-        return true
-    }
+    override fun isFoul() = true
 }
