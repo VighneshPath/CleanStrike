@@ -162,4 +162,21 @@ class GameTest {
 
         assertThrows<InvalidOptionTypeException> { game.playTurn(multiStrike) }
     }
+
+    @Test
+    fun `should allow more than two players and declare a winner`(){
+        val multiStrike = "2"
+        val skipTurn = "6"
+        val player3 = Player()
+        game = Game(board, listOf(player1, player2, player3))
+
+        for(turn in 0..3){
+            game.playTurn(multiStrike)
+            game.playTurn(skipTurn)
+            game.playTurn(skipTurn)
+        }
+
+        assertNotNull(game.getWinner())
+        assertEquals(player1, game.getWinner())
+    }
 }
