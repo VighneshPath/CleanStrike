@@ -1,5 +1,6 @@
 package models
 
+import constants.INITIAL_PLAYER_INDEX
 import constants.MAX_POSSIBLE_FOULS
 import constants.MAX_POSSIBLE_NOT_POCKETED_TURNS_BEFORE_PENALTY
 import models.GameStatus.*
@@ -8,11 +9,16 @@ import models.strikes.Strike
 import models.strikes.StrikeFactory
 
 class Game(private val board: Board, private val playersList: List<Player>) {
-    private var currentPlayerIndex = -1
+    private var currentPlayerIndex = INITIAL_PLAYER_INDEX
     private var winningPlayer: Player? = null
     private var gameStatus = ACTIVE
 
+    fun getWinner(): Player? {
+        return winningPlayer
+    }
+
     fun playTurn(option: String): GameStatus {
+        if (gameStatus != COMPLETE && board.doesNotHaveCoins()) setGameStatusToDrawIfNotAlready()
         if (gameIsAlreadyOver()) return gameStatus
 
         updateCurrentPlayerIndex()
@@ -32,16 +38,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         return gameStatus
     }
 
-    private fun gameIsAlreadyOver(): Boolean {
-        if (gameStatus == COMPLETE) return true
-
-        if (board.doesNotHaveCoins()) {
-            setGameStatusToDrawIfNotAlready()
-            return true
-        }
-
-        return false
-    }
+    private fun gameIsAlreadyOver() = gameStatus == COMPLETE || gameStatus == DRAW
 
     private fun setGameStatusToDrawIfNotAlready() {
         if (gameStatus != DRAW) gameStatus = DRAW
@@ -60,11 +57,11 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         val potentialWinningPlayers = playersList.filter { it.getPlayerPoints() >= 5 }
         potentialWinningPlayers.forEach { player1 ->
 
-            val playersLostTo = playersList.filter { player2 ->
+            val playerNotWonWith = playersList.filter { player2 ->
                 (player1 != player2 && (player1.getPlayerPoints() < player2.getPlayerPoints() + 3))
             }
 
-            if (playersLostTo.isEmpty()) {
+            if (playerNotWonWith.isEmpty()) {
                 winningPlayer = player1
                 return true
             }
@@ -113,8 +110,4 @@ class Game(private val board: Board, private val playersList: List<Player>) {
     }
 
     private fun updatedBoardBasedOn(strike: Strike) = board.updateCoinsBy(strike.getCoinUpdateForBoard())
-
-    fun getWinner(): Player? {
-        return winningPlayer
-    }
 }

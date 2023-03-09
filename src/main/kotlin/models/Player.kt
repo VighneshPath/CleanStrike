@@ -5,21 +5,13 @@ data class Player(private var coins: Coins = Coins(0, 0)) {
     private var penaltyPoints = 0L
     private var consecutiveNotPocketedCoins = 0L
 
-    fun getPlayerPenaltyPoints(): Long {
-        return penaltyPoints
-    }
+    fun getPlayerPenaltyPoints() = penaltyPoints
 
-    fun getPlayerPoints(): Long {
-        return points
-    }
+    fun getPlayerPoints() = points
 
-    fun getPlayerCoins(): Coins {
-        return coins
-    }
+    fun getPlayerCoins() = coins
 
-    fun getPlayerConsecutiveNotPocketedCoins(): Long {
-        return consecutiveNotPocketedCoins
-    }
+    fun getPlayerConsecutiveNotPocketedCoins() = consecutiveNotPocketedCoins
 
     fun updatePointsBy(points: Long) {
         this.points += points

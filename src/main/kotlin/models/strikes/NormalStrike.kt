@@ -4,20 +4,12 @@ import models.Coins
 
 class NormalStrike : Strike {
 
-    override fun getPoints(): Long {
-        return 1L
-    }
+    override fun getPoints() = 1L
 
-    override fun getCoinUpdateForPlayer(): Coins {
-        return Coins(1, 0)
-    }
+    override fun getCoinUpdateForPlayer() = Coins(1, 0)
 
-    override fun getCoinUpdateForBoard(): Coins {
-        return Coins(-1, 0)
-    }
+    override fun getCoinUpdateForBoard() = Coins(-1, 0)
 
-    override fun isFoul(): Boolean {
-        return false
-    }
+    override fun isFoul() = false
 
 }
