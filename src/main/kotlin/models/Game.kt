@@ -53,7 +53,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         potentialWinningPlayers.forEach { player1 ->
 
             val playerNotWonWith = playersList.filter { player2 ->
-                (player1 != player2 && (player1.getPlayerPoints() < player2.getPlayerPoints() + 3))
+                (player1 != player2 && (player1.getPlayerPoints() <= player2.getPlayerPoints() + 3))
             }
 
             if (playerNotWonWith.isEmpty()) {
