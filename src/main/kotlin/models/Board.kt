@@ -3,9 +3,7 @@ package models
 import exceptions.InvalidOptionTypeException
 
 class Board(private var coins: Coins) {
-    fun doesNotHaveCoins(): Boolean {
-        return !(coins.blackCoins > 0 || coins.redCoins > 0)
-    }
+    fun doesNotHaveCoins() =  !(coins.blackCoins > 0 || coins.redCoins > 0)
 
     fun updateCoinsBy(coins: Coins) {
         checkCoinUpdate(coins)

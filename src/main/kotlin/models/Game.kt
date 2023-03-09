@@ -13,9 +13,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
     private var winningPlayer: Player? = null
     private var gameStatus = ACTIVE
 
-    fun getWinner(): Player? {
-        return winningPlayer
-    }
+    fun getWinner() = winningPlayer
 
     fun playTurn(option: String): GameStatus {
         if (gameStatus != COMPLETE && board.doesNotHaveCoins()) setGameStatusToDrawIfNotAlready()
@@ -48,10 +46,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
         currentPlayerIndex = (currentPlayerIndex + 1) % playersList.size
     }
 
-    private fun getCurrentPlayer(): Player {
-        return playersList[currentPlayerIndex]
-    }
-
+    private fun getCurrentPlayer() = playersList[currentPlayerIndex]
 
     private fun checkIfAnyPlayerWon(): Boolean {
         val potentialWinningPlayers = playersList.filter { it.getPlayerPoints() >= 5 }
