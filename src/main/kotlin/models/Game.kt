@@ -48,7 +48,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
 
     private fun getCurrentPlayer() = playersList[currentPlayerIndex]
 
-    private fun checkIfAnyPlayerWon(): Boolean {
+    private fun checkAndSetWinnerIfAnyPlayerWon(): Boolean {
         val potentialWinningPlayers = playersList.filter { it.getPlayerPoints() >= 5 }
         potentialWinningPlayers.forEach { player1 ->
 
@@ -66,7 +66,7 @@ class Game(private val board: Board, private val playersList: List<Player>) {
 
 
     private fun updateGameStatus() {
-        if (checkIfAnyPlayerWon()) {
+        if (checkAndSetWinnerIfAnyPlayerWon()) {
             gameStatus = COMPLETE
         } else if (board.doesNotHaveCoins()) {
             gameStatus = DRAW
