@@ -29,7 +29,7 @@ class GameTest {
         val expectedPlayerPoints = 1L
         val expectedGameStatus = ACTIVE
 
-        val actualGameStatus = game.playTurn(option)
+        val actualGameStatus = game.playTurn(option).getOrNull()
 
         assertEquals(expectedBoardCoins, board.getCoins())
         assertEquals(expectedPlayerCoins, player1.getPlayerCoins())
@@ -57,8 +57,9 @@ class GameTest {
         board = Board(Coins(0, 0))
         game = Game(board, listOf(player1, player2))
         val expectedGameStatus = DRAW
+        val skipTurn = "6"
 
-        val actualBoardStatus = game.playTurn("6")
+        val actualBoardStatus = game.playTurn(skipTurn).getOrNull()
 
         assertEquals(expectedGameStatus, actualBoardStatus)
     }
@@ -76,8 +77,7 @@ class GameTest {
             game.playTurn(normalStrike)
             game.playTurn(skipTurn)
         }
-        val actualGameStatus = game.playTurn(normalStrike)
-
+        val actualGameStatus = game.playTurn(normalStrike).getOrNull()
 
         assertEquals(expectedGameStatus, actualGameStatus)
         assertNotNull(game.getWinner())
@@ -96,7 +96,7 @@ class GameTest {
             game.playTurn(normalStrike)
             game.playTurn(normalStrike)
         }
-        val actualGameStatus = game.playTurn(normalStrike)
+        val actualGameStatus = game.playTurn(normalStrike).getOrNull()
 
         assertEquals(expectedGameStatus, actualGameStatus)
         assertNull(game.getWinner())
@@ -146,28 +146,34 @@ class GameTest {
     @Test
     fun `should throw an error if there are more than one red strikes`() {
         val redStrike = "3"
+        val expectedFailureStatus = true
 
         game.playTurn(redStrike)
+        val result = game.playTurn(redStrike)
 
-        assertThrows<InvalidOptionTypeException> { game.playTurn(redStrike) }
+        assertEquals(expectedFailureStatus, result.isFailure)
+        assertThrows<InvalidOptionTypeException> { result.getOrThrow() }
     }
 
     @Test
     fun `should throw an error if there are more than 4 multi strikes`() {
         val multiStrike = "2"
+        val expectedFailureStatus = true
 
         for (turn in 0 until 4) {
             game.playTurn(multiStrike)
         }
+        val result = game.playTurn(multiStrike)
 
-        assertThrows<InvalidOptionTypeException> { game.playTurn(multiStrike) }
+        assertEquals(expectedFailureStatus, result.isFailure)
+        assertThrows<InvalidOptionTypeException> { result.getOrThrow() }
     }
 
     @Test
     fun `should allow more than two players and declare a winner`() {
         val multiStrike = "2"
         val skipTurn = "6"
-        val player3 = Player()
+        val player3     = Player()
         game = Game(board, listOf(player1, player2, player3))
 
         for (turn in 0..3) {
@@ -178,5 +184,16 @@ class GameTest {
 
         assertNotNull(game.getWinner())
         assertEquals(player1, game.getWinner())
+    }
+
+    @Test
+    fun `should throw an exception if option is invalid`(){
+        val invalidStrike = "10"
+        val expectedResultFailure = true
+
+        val result = game.playTurn(invalidStrike)
+
+        assertEquals(expectedResultFailure, result.isFailure)
+        assertThrows<InvalidOptionTypeException> { result.getOrThrow() }
     }
 }

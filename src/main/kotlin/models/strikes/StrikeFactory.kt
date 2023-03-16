@@ -4,14 +4,14 @@ import exceptions.InvalidOptionTypeException
 import models.StrikeTypes.*
 
 object StrikeFactory {
-    fun createStrike(chosenStrike: String): Strike {
+    fun createStrike(chosenStrike: String): Result<Strike> {
         return when (chosenStrike) {
-            NORMAL_STRIKE.option -> NormalStrike()
-            MULTI_STRIKE.option -> MultiStrike()
-            RED_STRIKE.option -> RedStrike()
-            STRIKER_STRIKE.option -> StrikerStrike()
-            DEFUNCT_STRIKE.option -> DefunctStrike()
-            else -> throw InvalidOptionTypeException()
+            NORMAL_STRIKE.option -> Result.success(NormalStrike())
+            MULTI_STRIKE.option -> Result.success(MultiStrike())
+            RED_STRIKE.option -> Result.success(RedStrike())
+            STRIKER_STRIKE.option -> Result.success(StrikerStrike())
+            DEFUNCT_STRIKE.option -> Result.success(DefunctStrike())
+            else -> Result.failure(InvalidOptionTypeException())
         }
     }
 }
