@@ -7,4 +7,5 @@ interface Strike {
     fun getCoinUpdateForPlayer(): Coins
     fun getCoinUpdateForBoard(): Coins
     fun isFoul(): Boolean
+    fun pocketedCoin(): Boolean
 }

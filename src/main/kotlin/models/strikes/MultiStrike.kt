@@ -8,4 +8,5 @@ class MultiStrike : Strike {
     override fun getCoinUpdateForBoard() = Coins(-2, 0)
 
     override fun isFoul() = false
+    override fun pocketedCoin() = true
 }

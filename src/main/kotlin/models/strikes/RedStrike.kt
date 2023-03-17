@@ -10,4 +10,5 @@ class RedStrike : Strike {
     override fun getCoinUpdateForBoard() = Coins(0, -1)
 
     override fun isFoul() = false
+    override fun pocketedCoin() = true
 }

@@ -11,5 +11,6 @@ class NormalStrike : Strike {
     override fun getCoinUpdateForBoard() = Coins(-1, 0)
 
     override fun isFoul() = false
+    override fun pocketedCoin() = true
 
 }

@@ -8,4 +8,5 @@ class DefunctStrike : Strike {
 
     override fun getCoinUpdateForBoard() = Coins(-1, 0)
     override fun isFoul() = true
+    override fun pocketedCoin() = false
 }
